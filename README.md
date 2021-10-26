@@ -1,6 +1,5 @@
 # fairMIA
 
-# Efface-the-haze
 
 The main aim of this project is to develop an algorithm for fair influence maximization using MIA (Maximum Influence Arborescence) heuristic. This project is carried out as part of Socian Network Analysis course CSL7390 under the guidance of [Dr. Suman Kundu](https://sumankundu.info/).
 

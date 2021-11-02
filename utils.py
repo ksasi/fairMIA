@@ -85,7 +85,40 @@ def plot_minf(minf, minf_fair, title): # Reference : Stackoverflow https://stack
     plt.show()
     plt.close()
 
+
+def fairness_score(n,n_influenced):
+    '''
+
+    :param n: list   number of nodes in each group
+    :param n_influenced: list   number of nodes influenced in each group
+
+    :return: fairness score
+
+    :EXAMPLE:
+    fairness_score([40,30,20],[20,20,10])
+    n can be a list of ones and n_influenced can be normalized influence for all groups.
+
+    '''
+
+    n_groups=len(n)
+    if n_groups!=len(n_influenced):
+        raise Exception('length of n,n_influenced should be same')
+    percentage_of_influence=list(map(lambda x,y : round((y/x)*100,4) , n,n_influenced))
+    mean= round(sum(percentage_of_influence)/n_groups,4)
+    deviation=list(map(lambda x: abs(mean-x),percentage_of_influence))
+    sum_of_deviation=round(sum(deviation),4)
+    deviation=sum_of_deviation/mean
+    return round(1-deviation/n_groups,4)
+
     
 
-
-
+def FrScores(network, attrib_dict, Sf, diff_prob, simulations):
+    """Returns fairness scores dictionary for each attribute by considering all groups of each attribute"""
+    FrS_dict = dict()
+    g_spread_dict = group_spread(network, diff_prob, Sf, simulations, attrib_dict, edge_pp_lb, edge_pp_ub, rand_seed = 42)
+    for attrib_name in attrib_dict.keys():
+        ginf = []
+        for attrib_val in attrib_dict[attrib_name]:
+            ginf.append(g_spread_dict[attrib_val])
+        FrS_dict[attrib_name] = fairness_score([1]*len(ginf), ginf)
+    return FrS_dict

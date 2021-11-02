@@ -8,7 +8,7 @@ import pickle
 from im import icm_simulation, greedy_influence_max
 from mia import MIA
 from fairmia import fmia, fmia_v2
-from utils import PoF, MInf, plot_pof, plot_minf
+from utils import PoF, MInf, FrScores, plot_pof, plot_minf
 import NetworkGenerator as gen
 from config import *
 
@@ -31,6 +31,7 @@ def main():
 
     pof = dict()
     minf_fair = dict()
+    frs = dict()
     for key,val in attrib_dict.items():
         l_dict = dict()
         l_dict[key] = val
@@ -38,6 +39,9 @@ def main():
         l_pof = PoF(fgraph, l_dict, final_s, l_gf, rand_diff_prob15, simulations)
         pof[key] = l_pof[key]
         print("Price of group fairness :", pof)
+        l_frs = FrScores(fgraph, l_dict, l_gf, rand_diff_prob15, simulations)
+        frs[key] = l_frs[key]
+        print("Attribute fairness score :", frs)
         l_minf_fair = MInf(fgraph, l_dict, l_gf, rand_diff_prob15, simulations)
         minf_fair[key] = l_minf_fair[key]
         print("Min fraction influenced with fair MIA :",minf_fair)
@@ -52,6 +56,8 @@ def main():
     minf = MInf(fgraph, attrib_dict, final_s, rand_diff_prob15, simulations)
     print("Min fraction influence with MIA :",minf)
     plot_minf(minf, minf_fair, "Simulated Antelope Valley network")
+
+    print("Attribute fairness score with fair MIA:", frs)
     
     
     ### Using Synthetically generated Network
@@ -75,12 +81,15 @@ def main():
 
     pof_g = dict()
     minf_fair_g = dict()
+    frs_g = dict()
     for key,val in attrib_dict_g.items():
         l_dict = dict()
         l_dict[key] = val
         l_gf = fmia_v2(G, k, theta, l_dict, final_g)
         l_pof = PoF(G, l_dict, final_g, l_gf, rand_diff_prob15, simulations)
         pof_g[key] = l_pof[key]
+        l_frs = FrScores(fgraph, l_dict, l_gf, rand_diff_prob15, simulations)
+        frs_g[key] = l_frs[key]
         l_minf_fair = MInf(G, l_dict, l_gf, rand_diff_prob15, simulations)
         minf_fair_g[key] = l_minf_fair[key]
 
@@ -91,6 +100,8 @@ def main():
     minf_g = MInf(G, attrib_dict_g, final_g, rand_diff_prob15, simulations)
     print("Min fraction influence with MIA :",minf_g)
     plot_minf(minf_g, minf_fair_g, "Synthetic Network")
+
+    print("Attribute fairness score with fair MIA:", frs_g)
 
 if __name__ == '__main__':
     main()

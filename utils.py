@@ -24,7 +24,10 @@ def PoF(network, attrib_dict, S, Sf, diff_prob, simulations):
         for attrib_val in attrib_dict[attrib_name]:
             ginf_opt.append(g_spread_dict[attrib_val])
             ginf_fair.append(g_spread_dict_fair[attrib_val])
-            pof_g = g_spread_dict[attrib_val]/g_spread_dict_fair[attrib_val]
+            if g_spread_dict_fair[attrib_val] == 0:
+                pof_g = g_spread_dict[attrib_val]/(g_spread_dict_fair[attrib_val] + 0.01)
+            else:
+                pof_g = g_spread_dict[attrib_val]/g_spread_dict_fair[attrib_val]
             pofg_list.append(pof_g)
         #print(ginf_opt)
         #print(ginf_fair)

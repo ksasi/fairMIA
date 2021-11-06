@@ -88,7 +88,7 @@ def main():
         l_gf = fmia_v2(G, k, theta, l_dict, final_g)
         l_pof = PoF(G, l_dict, final_g, l_gf, rand_diff_prob15, simulations)
         pof_g[key] = l_pof[key]
-        l_frs = FrScores(fgraph, l_dict, l_gf, rand_diff_prob15, simulations)
+        l_frs = FrScores(G, l_dict, l_gf, rand_diff_prob15, simulations)
         frs_g[key] = l_frs[key]
         l_minf_fair = MInf(G, l_dict, l_gf, rand_diff_prob15, simulations)
         minf_fair_g[key] = l_minf_fair[key]
